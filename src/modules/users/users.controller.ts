@@ -11,12 +11,10 @@ export class UsersController {
   @Post()
   async create(@Body() body: CreateUserDto, @Res() res:Response) {
     try {
-      
-      let {message ,error , data} = await this.usersService.create({...body})
+      let {message ,error , data} = await this.usersService.createNewUser({...body})
       if (error) {
         throw error
       }
-      
       return res.status(200).json({
         message,
         data
@@ -26,25 +24,5 @@ export class UsersController {
         error
       })
     }
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
   }
 }
