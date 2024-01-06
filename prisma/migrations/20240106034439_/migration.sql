@@ -3,6 +3,8 @@ CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userName` VARCHAR(191) NOT NULL,
     `passwords` VARCHAR(191) NOT NULL,
+    `status` BOOLEAN NOT NULL DEFAULT true,
+    `role` ENUM('member', 'admin') NOT NULL DEFAULT 'member',
     `avatar` LONGTEXT NOT NULL,
     `email` VARCHAR(191) NOT NULL,
 

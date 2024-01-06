@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import PrismaService from 'src/prisma/prisma.service';
+import { LoginUserDto } from './dto/login-user.dto';
+import { hash , compare} from 'bcrypt';
+import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +15,7 @@ export class UsersService {
         {
           data:{
             ...body,
+            passwords:await hash(body.passwords,5),
             avatar:"123"
           }
         }
@@ -33,6 +37,41 @@ export class UsersService {
           }
         }
       }
+    }
+  }
+
+  async login(loginDetail:LoginUserDto){
+    try {
+      let user = await this.prisma.user.findUnique({
+        where:{
+          userName:loginDetail.userName
+        }
+      })
+      if (user == null) {
+        throw {
+            message:"Account was not found!"
+        }
+      }
+
+      if (user.status == false) {
+        throw {
+          message:"This account was freezed!"
+        }
+      }
+
+      let checkPassword = await compare(loginDetail.passwords,user.passwords)
+      if (checkPassword) {
+        return {
+          message:"Login Success!",
+          token: sign(user,process.env.HASH_PRIVATE_KEY)
+        }
+      }else{
+        throw {
+          message:"Passwords incorrect!"
+        }
+      }
+    } catch (error) {
+      return error
     }
   }
 }
