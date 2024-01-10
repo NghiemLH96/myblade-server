@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete , Res} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete , Res, Req} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('users')
@@ -28,8 +28,10 @@ export class UsersController {
   }
 
   @Post("login")
-  async login(@Body() body:LoginUserDto, @Res() res:Response){
+  async login(@Body() body:LoginUserDto, @Res() res:Response , @Req() req:Request){
     try {
+      console.log(req);
+      
       let {message , error , token} = await this.usersService.login(body)
       if (error) {
         throw error
