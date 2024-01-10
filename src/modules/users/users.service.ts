@@ -25,6 +25,7 @@ export class UsersService {
         data:user
       }
     } catch (error) {
+      console.log("service error",error);
       if (error.code == "P2002") {
         if(error.meta.target == "User_email_key"){
           return {
