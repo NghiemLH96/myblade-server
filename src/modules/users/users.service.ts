@@ -75,4 +75,12 @@ export class UsersService {
       return error
     }
   }
+
+  async uploadAvatar(){
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 }
